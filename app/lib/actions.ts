@@ -69,7 +69,11 @@ const UpdateInvoice = FormSchema.omit({ id: true, date: true });
  
 // ...
  
-export async function updateInvoice(id: string, formData: FormData) {
+export async function updateInvoice(
+  id: string,
+  prevState: State,
+  formData: FormData,
+) {
   const validatedFields = UpdateInvoice.safeParse({
     customerId: formData.get('customerId'),
     amount: formData.get('amount'),
@@ -80,7 +84,7 @@ export async function updateInvoice(id: string, formData: FormData) {
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Missing Fields. Failed to Create Invoice.',
+      message: 'Missing Fields. Failed to Update Invoice.',
     };
   }
  const { customerId, amount, status } = validatedFields.data;
@@ -96,7 +100,7 @@ export async function updateInvoice(id: string, formData: FormData) {
         // We'll also log the error to the console for now
     console.error(error);
     return {
-      message: 'Database Error: Failed to Create Invoice.',
+      message: 'Database Error: Failed to Update Invoice.',
     };
         
     }
